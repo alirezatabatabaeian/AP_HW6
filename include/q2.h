@@ -60,6 +60,7 @@ static void sort(std::vector<Patient>& patients)
             const Patient& patient2) { return (3 * patient1.age + 5 * patient1.smokes + 2 * patient1.area_q + 4 * patient1.alkhol)
                                            > (3 * patient2.age + 5 * patient2.smokes + 2 * patient2.area_q + 4 * patient2.alkhol); });
 };
+//----------------------------------------------------------------------------//
 }
 
 #endif // Q2_H
