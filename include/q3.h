@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <queue>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -18,11 +19,15 @@ struct Flight {
     size_t price;
 };
 //----------------------------------------------------------------------------//
-static std::priority_queue<Flight> gather_flights(std::string filename)
+static auto gather_flights(std::string filename)
 {
-    std::priority_queue<Flight> flights {};
+    auto function { [](const Flight& flight1, const Flight& flight2) { return (flight1.duration + flight1.connection_times + 3 * flight1.price)
+                                                                           > (flight2.duration + flight2.connection_times + 3 * flight2.price); } };
+    std::priority_queue<Flight, std::vector<Flight>, decltype(function)> flights { function };
     Flight flight {};
     std::stringstream temp {};
+    size_t min {};
+    size_t hour {};
     std::ifstream file(filename);
     std::stringstream buffer {};
     buffer << file.rdbuf();
@@ -31,23 +36,79 @@ static std::priority_queue<Flight> gather_flights(std::string filename)
     std::smatch match;
 
     while (std::regex_search(text, match, pattern)) {
-        // std::cout << match[0] << std::endl; // make comment
+        flight = {};
+        min = {};
+        hour = {};
         flight.flight_number = match[1];
-        // patient.name.append(" ");
-        // patient.name.append(match[2]);
-        // temp << match[3];
-        // temp >> patient.age;
-        // temp.clear();
-        // temp << match[4];
-        // temp >> patient.smokes;
-        // temp.clear();
-        // temp << match[5];
-        // temp >> patient.area_q;
-        // temp.clear();
-        // temp << match[6];
-        // temp >> patient.alkhol;
-        // temp.clear();
-        // patients.push_back(patient); //change
+
+        temp << match[2];
+        temp >> flight.duration;
+        flight.duration = flight.duration * 60;
+        temp.clear();
+
+        temp << match[3];
+        temp >> min;
+        flight.duration += min;
+        temp.clear();
+        min = {};
+
+        temp << match[4];
+        temp >> flight.connections;
+        temp.clear();
+
+        temp << match[5];
+        temp >> flight.connection_times;
+        flight.connection_times = flight.connection_times * 60;
+        temp.clear();
+
+        temp << match[6];
+        temp >> min;
+        flight.connection_times += min;
+        temp.clear();
+        min = {};
+
+        temp << match[7];
+        temp >> hour;
+        flight.connection_times += hour * 60;
+        temp.clear();
+        hour = {};
+
+        temp << match[8];
+        temp >> min;
+        flight.connection_times += min;
+        temp.clear();
+        min = {};
+
+        temp << match[9];
+        temp >> hour;
+        flight.connection_times += hour * 60;
+        temp.clear();
+        hour = {};
+
+        temp << match[10];
+        temp >> min;
+        flight.connection_times += min;
+        temp.clear();
+        min = {};
+
+        temp << match[11];
+        temp >> hour;
+        flight.connection_times += hour * 60;
+        temp.clear();
+        hour = {};
+
+        temp << match[12];
+        temp >> min;
+        flight.connection_times += min;
+        temp.clear();
+        min = {};
+
+        temp << match[13];
+        temp >> flight.price;
+        temp.clear();
+
+        flights.push(flight);
+
         text = match.suffix().str();
     }
 
