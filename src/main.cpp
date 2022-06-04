@@ -8,12 +8,8 @@
 
 int main(int argc, char** argv)
 {
-    if (true) // make false to run unit-tests
+    if (false) // make false to run unit-tests
     {
-        // int a { 5 };
-        // double b { static_cast<double>(a) };
-        // std::cout << b << std::endl;
-        q2::read_file("lung_cancer.csv");
 
     } else {
         ::testing::InitGoogleTest(&argc, argv);
