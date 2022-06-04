@@ -1,5 +1,6 @@
 #ifndef Q4_H
 #define Q4_H
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -34,8 +35,22 @@ struct Sensor {
 //----------------------------------------------------------------------------//
 static Vector2D kalman_filter(std::vector<Sensor> sensors)
 {
-
     Vector2D final_pos {};
+    double sum_weight {};
+
+    auto func {
+        [&final_pos, &sum_weight](const Sensor& sensor) {
+            final_pos.x += sensor.pos.x * sensor.accuracy;
+            final_pos.y += sensor.pos.y * sensor.accuracy;
+            sum_weight += sensor.accuracy;
+        }
+    };
+
+    std::for_each(sensors.begin(), sensors.end(), func);
+
+    final_pos.x = final_pos.x / sum_weight;
+    final_pos.y = final_pos.y / sum_weight;
+
     return final_pos;
 }
 //----------------------------------------------------------------------------//
