@@ -82,13 +82,14 @@ TEST(HW6Test, TEST7)
     EXPECT_EQ(flight_numbers, correct);
 }
 
-// TEST(HW6Test, TEST8) {
-//     std::vector<q4::Sensor> sensors{{{0, 0.01}, 0.5},
-//                                 {{0.5, 0.009}, 0.2}};
-//     auto kalman{q4::kalman_filter(sensors)};
-//     EXPECT_NEAR(kalman.x, 0.142, 0.01);
-//     EXPECT_NEAR(kalman.y, 0.0097, 0.01);
-// }
+TEST(HW6Test, TEST8)
+{
+    std::vector<q4::Sensor> sensors { { { 0, 0.01 }, 0.5 },
+        { { 0.5, 0.009 }, 0.2 } };
+    // auto kalman{q4::kalman_filter(sensors)};
+    // EXPECT_NEAR(kalman.x, 0.142, 0.01);
+    // EXPECT_NEAR(kalman.y, 0.0097, 0.01);
+}
 
 // TEST(HW6Test, TEST9) {
 //     std::vector<q4::Sensor> sensors{{{1, 0.3}, 0.5},
