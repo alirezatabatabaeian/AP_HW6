@@ -5,15 +5,15 @@
 #include <string>
 #include <vector>
 
-namespace q1 {
-template <typename T1, typename T2>
-double gradient_descent(T1 initial_value, T1 step_size, T2 func = {})
+namespace q1 { // define namespace
+template <typename T1, typename T2> // make template
+double gradient_descent(T1 initial_value, T1 step_size, T2 func = {}) // gradient descent function
 {
     double X { initial_value };
     double temp { X + 0.1 };
-    while (std::abs(X - temp) > 1e-8) {
+    while (std::abs(X - temp) > 1e-8) { // stop condition
         temp = X;
-        X = X - step_size * ((func(X + 1e-8) - func(X)) / 1e-8);
+        X = X - step_size * ((func(X + 1e-8) - func(X)) / 1e-8); // calculate derivation and new X
     }
     return X;
 }

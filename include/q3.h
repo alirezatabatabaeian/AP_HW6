@@ -11,7 +11,7 @@
 
 namespace q3 {
 //----------------------------------------------------------------------------//
-struct Flight {
+struct Flight { // flight features
     std::string flight_number;
     size_t duration;
     size_t connections;
@@ -19,23 +19,25 @@ struct Flight {
     size_t price;
 };
 //----------------------------------------------------------------------------//
-static auto gather_flights(std::string filename)
+static auto gather_flights(std::string filename) // read file and sort
 {
+    // lmbda function
     auto function { [](const Flight& flight1, const Flight& flight2) { return (flight1.duration + flight1.connection_times + 3 * flight1.price)
                                                                            > (flight2.duration + flight2.connection_times + 3 * flight2.price); } };
-    std::priority_queue<Flight, std::vector<Flight>, decltype(function)> flights { function };
+    std::priority_queue<Flight, std::vector<Flight>, decltype(function)> flights { function }; // priority_queue
     Flight flight {};
     std::stringstream temp {};
     size_t min {};
     size_t hour {};
-    std::ifstream file(filename);
+    std::ifstream file(filename); // read file
     std::stringstream buffer {};
     buffer << file.rdbuf();
     std::string text { buffer.str() };
+    // regular expression
     std::regex pattern(R"(\d+-\s\w+:(\w+)\s-\s\w+:(\d*)h?(\d*)m?\s-\s\w+:(\d)+\s-\s\w+:(\d*)h?(\d*)m?,?(\d*)h?(\d*)m?,?(\d*)h?(\d*)m?,?(\d*)h?(\d*)m?\s-\s\w+:(\d+))");
     std::smatch match;
 
-    while (std::regex_search(text, match, pattern)) {
+    while (std::regex_search(text, match, pattern)) { // search text
         flight = {};
         min = {};
         hour = {};
@@ -43,7 +45,7 @@ static auto gather_flights(std::string filename)
 
         temp << match[2];
         temp >> flight.duration;
-        flight.duration = flight.duration * 60;
+        flight.duration = flight.duration * 60; // change hours to minutes
         temp.clear();
 
         temp << match[3];
@@ -107,9 +109,9 @@ static auto gather_flights(std::string filename)
         temp >> flight.price;
         temp.clear();
 
-        flights.push(flight);
+        flights.push(flight); // add to queue
 
-        text = match.suffix().str();
+        text = match.suffix().str(); // modify text
     }
 
     return flights;

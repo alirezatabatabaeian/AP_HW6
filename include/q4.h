@@ -11,22 +11,22 @@
 
 namespace q4 {
 //----------------------------------------------------------------------------//
-struct Vector2D {
-    Vector2D()
+struct Vector2D { // vector 2D
+    Vector2D() // default constructor
         : x { 0 }
         , y { 0 } {};
-    Vector2D(double _x, double _y)
+    Vector2D(double _x, double _y) // main constructor
         : x { _x }
         , y { _y } {};
-    Vector2D(const Vector2D& _pos)
+    Vector2D(const Vector2D& _pos) // copy constructor
         : x { _pos.x }
         , y { _pos.y } {};
     double x {};
     double y {};
 };
 //----------------------------------------------------------------------------//
-struct Sensor {
-    Sensor(const Vector2D& _pos, double _accuracy)
+struct Sensor { // sensor class
+    Sensor(const Vector2D& _pos, double _accuracy) // main constructor
         : pos { _pos }
         , accuracy { _accuracy } {};
     Vector2D pos;
@@ -38,7 +38,7 @@ static Vector2D kalman_filter(std::vector<Sensor> sensors)
     Vector2D final_pos {};
     double sum_weight {};
 
-    auto func {
+    auto func { // lambda function for elements in vector
         [&final_pos, &sum_weight](const Sensor& sensor) {
             final_pos.x += sensor.pos.x * sensor.accuracy;
             final_pos.y += sensor.pos.y * sensor.accuracy;
@@ -46,10 +46,10 @@ static Vector2D kalman_filter(std::vector<Sensor> sensors)
         }
     };
 
-    std::for_each(sensors.begin(), sensors.end(), func);
+    std::for_each(sensors.begin(), sensors.end(), func); // automatic for
 
-    final_pos.x = final_pos.x / sum_weight;
-    final_pos.y = final_pos.y / sum_weight;
+    final_pos.x = final_pos.x / sum_weight; // normalization
+    final_pos.y = final_pos.y / sum_weight; // normalization
 
     return final_pos;
 }
